@@ -21,8 +21,8 @@ app.use('/',indexRouter)
 app.use('/directors',directorRouter)
 
 
-const DATABASE_URL = 'mongodb+srv://movieCruizer:test123@moviecruizer.j3fihwg.mongodb.net/?retryWrites=true&w=majority'
-mongoose.connect(DATABASE_URL,{useNewUrlParser : true})
+//const DATABASE_URL = 'mongodb+srv://movieCruizer:test123@moviecruizer.j3fihwg.mongodb.net/?retryWrites=true&w=majority'
+mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser : true})
 const db = mongoose.connection
 db.on('error',error => console.error(error))
 db.once('open',()=> console.log('connected to Mongoose'))
