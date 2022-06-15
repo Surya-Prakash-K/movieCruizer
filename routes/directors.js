@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
     if (req.query.name !== null && req.query.name != '') {
         searchOptions.name = new RegExp(req.query.name, 'i')
     }
-    /* searchOptions = { name: RegExp(req.query.name, 'i')} */
     try {
         const directors = await Director.find(searchOptions )
         res.render('directors/index', {
@@ -18,7 +17,6 @@ router.get('/', async (req, res) => {
     } catch {
         res.render('/')
     }
-
 })
 
 //new directors route
@@ -33,6 +31,7 @@ router.post('/', async (req, res) => {
     })
     try {
         const newDirector = await director.save()
+        /* res.redirect(`directors/${newDirector.id}`) */
         res.redirect(`directors`)
     } catch (e) {
         res.render('directors/new', {

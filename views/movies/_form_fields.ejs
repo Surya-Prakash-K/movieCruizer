@@ -1,0 +1,33 @@
+<div>
+    <label>Title</label>
+    <input type="text" name="title">
+</div>
+<div>
+    <label>Director</label>
+    <select name="director">
+        <% directors.forEach(director=> { %>
+            <% if(director.id===movie.director) { %>
+                <option selected label="<%= director.name %>" value="<%= director.id %>"></option>
+            <% } else { %>
+                 <option selected label="<%= director.name %>" value="<%= director.id %>"></option>
+             <% } %>
+         <% }) %>
+    </select>
+</div>
+<div>
+<label>Release Year</label>
+<input type="date" name="releaseDate" value="<%= movie.releaseDate == null ? '' : 
+   movie.releaseDate.toISOString().split('T')[0] %> ">
+</div>
+<div>
+    <label>Run Time</label>
+    <input type="text" name="runTime" value="<%= movie.runTime %> ">
+</div>
+<div>
+    <label>Cover Image</label>
+    <input type="file" name="cover">
+</div>
+<div>
+    <label>Description </label>
+    <textarea name="description" ><%= movie.description %> </textarea>
+</div>
