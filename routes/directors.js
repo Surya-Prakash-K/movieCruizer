@@ -52,7 +52,7 @@ router.get('/:id' , async(req,res ) => {
     }catch{
         res.redirect('/')
     }
-    res.send('Show Director '+ req.params.id)
+
 })
 
 router.get('/:id/edit', async (req,res) => {
