@@ -20,6 +20,18 @@ body{
     background:linear-gradient(to right ,
     var(--color-background-dark),var(--color-background-light));
 }
+.header-caption{
+    display: flex;
+    flex-direction: column;
+}
+
+.caption{
+    text-align: center;
+}
+
+.caption-end{
+    margin-left: 2.2rem;
+}
 
 .container{
     max-width: 1200px;
