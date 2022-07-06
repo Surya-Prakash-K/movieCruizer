@@ -1,19 +1,27 @@
 <header>
     <nav class="header-nav">
-       <a class="header-title" href="/">movieCruizer </a>
-       <ul>
-          <li>
-              <a href="/movies">All Movies</a> 
-          </li>
-          <li>
-              <a href="/movies/new">Add Movie</a> 
-          </li>
-          <li>
-             <a href="/directors">All Directors</a> 
-          </li>
-          <li>
-              <a href="/directors/new">Add Director</a> 
-          </li>
-       </ul> 
+        <a class="header-title" href="/">movieCruizer </a>
+        <ul>
+            <li>
+                <a href="/directors">All Directors</a>
+            </li>
+            <li>
+                <a href="/directors/new">Add Director</a>
+            </li>
+            <li>
+                <a href="/movies">All Movies</a>
+            </li>
+            <li>
+                <a href="/movies/new">Add Movie</a>
+            </li>
+        </ul>
+        <ul>
+            <li>
+                <form action="/logout?_method=DELETE" method="POST">
+                    <button class="logout-btn" type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+
     </nav>
 </header>
