@@ -80,9 +80,10 @@ router.get('/:id/edit', async (req, res) => {
     }
 })
 
+
 //Update Movie Route
 router.put('/:id', async (req, res) => {
-    
+
     let movie 
     try {
         movie = await Movie.findById(req.params.id)

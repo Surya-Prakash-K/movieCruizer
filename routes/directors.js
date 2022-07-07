@@ -41,6 +41,8 @@ router.post('/', async (req, res) => {
     }
 })
 
+
+//directors/2721482128e81
 router.get('/:id' , async(req,res ) => {
     try{
        const director = await Director.findById(req.params.id)
