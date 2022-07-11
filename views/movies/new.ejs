@@ -1,5 +1,6 @@
 <%- include('../partials/header.ejs') %>
-<h2 class="page-header">New Movie</h2>
+<%- include('../partials/errorMessage.ejs') %>
+<h2 class="page-header">New Post</h2>
 <form action="/movies" method="POST">
   <%- include('_form_fields') %>
     <div class="form-row form-row-end btn-row">

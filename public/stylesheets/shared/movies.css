@@ -40,6 +40,7 @@
     align-items: center;
     grid-gap: 1rem;
     grid-template-columns: auto auto;
+    margin-left: 2rem;
 }
 
 .movie-details-btn-grid{
@@ -48,10 +49,21 @@
     justify-items: flex-start;
     align-items: flex-start;
     grid-template-areas:
-      'edit delete'
-      'director director';
+      'posts'
+      'director';
     grid-gap: .4rem;
-    margin-top: .4rem;
+    margin-top: .4rem; 
+}
+
+.movie-details-edit-grid{
+    display: grid;
+    align-content: flex-start;
+    justify-items: flex-start;
+    align-items: flex-start;
+    grid-template-areas:
+      'edit delete';
+    grid-gap: .4rem;
+    margin-top: .4rem; 
 }
 
 .movie-details-director-button{

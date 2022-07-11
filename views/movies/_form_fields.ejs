@@ -4,7 +4,8 @@
         <input type="text" name="title" value="<%= movie.title %> ">
     </div>
     <div class="form-item">
-        <label>Director</label>
+        <label>Director <a href="/directors/new">not availabe? just add here!</a></label>
+        
         <select name="director">
             <% directors.forEach(director=> { %>
                 <% if(`${director.id}`===`${movie.director}`) { %>

@@ -3,27 +3,12 @@ const router = express.Router()
 const Director = require('../models/director')
 const Movie = require('../models/movie')
 
-//all directors route
-router.get('/', async (req, res) => {
-    let searchOptions = {}
-    if (req.query.name !== null && req.query.name != '') {
-        searchOptions.name = new RegExp(req.query.name, 'i')
-    }
-    try {
-        const directors = await Director.find(searchOptions )
-        res.render('directors/index', {
-            directors: directors,
-            searchOptions: req.query
-        })
-    } catch {
-        res.render('/')
-    }
-})
 
-//new directors route
+//new director route
 router.get('/new', (req, res) => {
     res.render('directors/new', { director: new Director() })
 })
+
 
 //create director route
 router.post('/', async (req, res) => {
@@ -32,7 +17,7 @@ router.post('/', async (req, res) => {
     })
     try {
         const newDirector = await director.save()
-        res.redirect(`directors/${newDirector.id}`)
+        res.redirect(`movies/new`)
     } catch (e) {
         res.render('directors/new', {
             director: director,
@@ -42,7 +27,7 @@ router.post('/', async (req, res) => {
 })
 
 
-//directors/2721482128e81
+//route for getting directors with specific id /2721482128e81
 router.get('/:id' , async(req,res ) => {
     try{
        const director = await Director.findById(req.params.id)
@@ -57,6 +42,7 @@ router.get('/:id' , async(req,res ) => {
 
 })
 
+//route for editing director with id
 router.get('/:id/edit', async (req,res) => {
     try{
        const director = await Director.findById(req.params.id) 
@@ -67,6 +53,7 @@ router.get('/:id/edit', async (req,res) => {
     
 })
 
+//route for updating director with id
 router.put('/:id',async(req,res) => {
     let director
     try {
@@ -87,12 +74,13 @@ router.put('/:id',async(req,res) => {
     }
 }) 
 
+//route for deleting a director with id
 router.delete('/:id', async(req,res) => {
     let director
     try {
         director = await Director.findById(req.params.id)
         await director.remove()
-        res.redirect('/directors')
+        res.redirect('/movies/new')
     } catch {
         if(director == null){
             res.redirect('/')
@@ -102,4 +90,5 @@ router.delete('/:id', async(req,res) => {
         
     }})
 
+//exporting the director router to server.js file  
 module.exports = router

@@ -7,15 +7,18 @@ const app = express()
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 const path = require('path')
-
-
 const passport = require('passport')
 const flash = require('express-flash');
 const session = require('express-session')
 
+require('./passport-config')(passport)
+
+
+
 const indexRouter = require('./routes/index')
 const directorRouter = require('./routes/directors')
 const movieRouter = require('./routes/movies')
+const userPostRouter = require('./routes/posts')
 
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -27,8 +30,8 @@ app.use(bodyParser.urlencoded({limit : '10mb', extended : false }))
 app.use(flash())
 app.use(session({
   secret:process.env.SESSION_SECRET,
-  resave:false,
-  saveUninitialized:false
+  resave:true,
+  saveUninitialized:true
 }))
 app.use(passport.initialize())
 app.use(passport.session())
@@ -36,7 +39,7 @@ app.use(passport.session())
 app.use('/',indexRouter)
 app.use('/directors',directorRouter)
 app.use('/movies',movieRouter)
-
+app.use('/user',userPostRouter)
 
 
 const mongoose  = require('mongoose')

@@ -33,9 +33,27 @@ const movieSchema = new mongoose.Schema({
       type : mongoose.Schema.Types.ObjectId,
       required : true,
       ref : 'Director'
+   },
+   postedBy:{
+      type : mongoose.Schema.Types.ObjectId,
+      required:true,
+      ref  : 'User'
    }
 })
 
+/*
+   
+   movieSchema.pre('remove',function(next){
+   Movie.find({postedBy : this.id},(err,movies) =>{
+      if(err){
+         next(err)
+      }else if(movies.postedBy !== this.id){
+        next(new Error('U cannot delete this' ))
+      }else{
+         next()
+      }
+   })
+ }) */
 
 movieSchema.virtual('coverImagePath').get(function() {
    if (this.coverImage != null && this.coverImageType != null) {

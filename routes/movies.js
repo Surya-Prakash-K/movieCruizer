@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const Movie = require('../models/movie')
+const User = require('../models/user')
 const Director = require('../models/director')
 const imageMimeTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif']
+const passport = require('passport')
 
-//all movies route
-router.get('/', async (req, res) => {
+
+//route for getting all movies by users and also searching by movie name
+router.get('/', checkAuthenticated, async (req, res) => {
     let query = Movie.find()
     if (req.query.title != null && req.query.title != '') {
         query = query.regex('title', new RegExp(req.query.title, 'i'))
@@ -15,7 +18,7 @@ router.get('/', async (req, res) => {
     }
     if (req.query.releasedAfter != null && req.query.releasedAfter != '') {
         query = query.gte('releaseDate', req.query.releasedAfter)
-    }
+    } 
     try {
         const movies = await query.exec()
         res.render('movies/index', {
@@ -29,22 +32,22 @@ router.get('/', async (req, res) => {
 })
 
 
-//new movies route
+//new movie post route
 router.get('/new', async (req, res) => {
     renderNewPage(res, new Movie())
 })
 
 
-//create movie route
-router.post('/', async (req, res) => {
-
+//route for posting a new movie post 
+router.post('/',checkAuthenticated ,async (req, res) => {
+    const user = req.user.id
     const movie = new Movie({
         title: req.body.title,
         director: req.body.director,
         releaseDate: new Date(req.body.releaseDate),
         runTime: req.body.runTime,
-        description: req.body.description
-
+        description: req.body.description,
+        postedBy:user
     })
     saveCover(movie, req.body.cover)
     try {
@@ -57,20 +60,25 @@ router.post('/', async (req, res) => {
     }
 })
 
-//show Movie Route
-router.get('/:id', async (req,res)=>{
+//route for getting movie post with specific id
+router.get('/:id', checkAuthenticated,async (req,res)=>{
   try{
+       const user = await Movie.findById(req.params.id)
+                              .populate('postedBy')
+                              .exec() 
       const movie = await Movie.findById(req.params.id)
                                .populate('director')
                                .exec()
-      res.render('movies/show',{movie : movie})
-  }catch{
+      res.render('movies/show',{movie : movie,user:user})
+  }catch(e){
+    console.log(e)
       res.redirect('/')
   }
 })
 
-//edit Movie Route
-router.get('/:id/edit', async (req, res) => {
+
+//route for editing movie post with id
+router.get('/:id/edit', checkAuthenticated, async (req, res) => {
     try{
      const movie = await Movie.findById(req.params.id)
      
@@ -81,8 +89,9 @@ router.get('/:id/edit', async (req, res) => {
 })
 
 
-//Update Movie Route
-router.put('/:id', async (req, res) => {
+
+//route for updating movie post with id
+router.put('/:id', checkAuthenticated, async (req, res) => {
 
     let movie 
     try {
@@ -96,7 +105,7 @@ router.put('/:id', async (req, res) => {
             saveCover(movie,req.body.cover)
         }
         await movie.save()
-        res.redirect(`/movies/${movie.id}`)
+        res.redirect('/myPosts')
     } catch {
         if(movie != null){
               renderEditPage(res, movie, true)
@@ -107,13 +116,13 @@ router.put('/:id', async (req, res) => {
     }
 })
 
-//delete Movie Route
-router.delete('/:id', async(req,res)=>{
+//route for deleting a movie post with id
+router.delete('/:id', checkAuthenticated, async(req,res)=>{
     let movie 
     try{
         movie = await Movie.findById(req.params.id)
         await movie.remove()
-        res.redirect('/movies')
+        res.redirect('/myPosts')
     }catch{
         if( movie != null){
            res.render('movies/show',{
@@ -126,17 +135,17 @@ router.delete('/:id', async(req,res)=>{
     }
 })
 
-
+//function for rendering new movie page
 async function renderNewPage(res, movie, hasError = false) {
     renderFormPage(res,movie,'new',hasError)
 }
 
-
+//function for rendering movie edit page
 async function renderEditPage(res, movie, hasError = false) {
     renderFormPage(res,movie,'edit',hasError)
 }
 
-
+//common functionality for both edit and new movie post
 async function renderFormPage(res, movie, form, hasError = false) {
     try {
         const directors = await Director.find({})
@@ -158,14 +167,34 @@ async function renderFormPage(res, movie, form, hasError = false) {
     }
 }
 
-
+//functionality for saving the cover image and its type 
 function saveCover(movie, coverEncoded) {
     if (coverEncoded == null) return
     const cover = JSON.parse(coverEncoded)
     if (cover != null && imageMimeTypes.includes(cover.type)) {
-        movie.coverImage = new Buffer.from(cover.data, 'base64')
+        movie.coverImage = new Buffer.from(cover.data, 'base64') //storing cover in binary format
         movie.coverImageType = cover.type
     }
 }
 
+
+//functionality for checking whether user is authenticated
+function checkAuthenticated(req,res, next) {
+    if (req.isAuthenticated()) {
+      return next()
+    }
+  
+    res.redirect('/login')
+  }
+
+  
+  //functionality for checking whether user is not authenticated
+  function checkNotAuthenticated (req, res, next) {
+    if (req.isAuthenticated()) {
+      return res.redirect('/')
+    }
+    next ()
+  }
+  
+//exporting the movie post router to server.js file
 module.exports = router
