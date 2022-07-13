@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
     }
 })
 
-
 //route for getting directors with specific id /2721482128e81
 router.get('/:id' , async(req,res ) => {
     try{
@@ -42,53 +41,6 @@ router.get('/:id' , async(req,res ) => {
 
 })
 
-//route for editing director with id
-router.get('/:id/edit', async (req,res) => {
-    try{
-       const director = await Director.findById(req.params.id) 
-       res.render('directors/edit', { director: director })
-    }catch{
-       res.redirect('/directors')
-    }
-    
-})
-
-//route for updating director with id
-router.put('/:id',async(req,res) => {
-    let director
-    try {
-        director = await Director.findById(req.params.id)
-        director.name = req.body.name
-        await director.save()
-        res.redirect(`/directors/${director.id}`)
-    } catch (e) {
-        if(director == null){
-            res.redirect('/')
-        }else{
-            res.render('directors/edit', {
-            director: director,
-            errorMessage: 'Error updating Director'
-        })
-        }
-        
-    }
-}) 
-
-//route for deleting a director with id
-router.delete('/:id', async(req,res) => {
-    let director
-    try {
-        director = await Director.findById(req.params.id)
-        await director.remove()
-        res.redirect('/movies/new')
-    } catch {
-        if(director == null){
-            res.redirect('/')
-        }else{
-            res.redirect(`/directors/${director.id}`)
-        }
-        
-    }})
 
 //exporting the director router to server.js file  
 module.exports = router

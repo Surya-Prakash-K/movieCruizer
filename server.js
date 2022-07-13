@@ -13,7 +13,7 @@ const session = require('express-session')
 
 require('./passport-config')(passport)
 
-
+var favicon = require('serve-favicon');
 
 const indexRouter = require('./routes/index')
 const directorRouter = require('./routes/directors')
@@ -26,6 +26,8 @@ app.set('layout','layouts/layout')
 app.use(expressLayouts)
 app.use(methodOverride('_method'))
 app.use(express.static('public'))
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 app.use(bodyParser.urlencoded({limit : '10mb', extended : false }))
 app.use(flash())
 app.use(session({
