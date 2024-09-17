@@ -46,10 +46,10 @@ app.use('/user',userPostRouter)
 
 const mongoose  = require('mongoose')
 
-mongoose.connect("mongodb+srv://test:test123@movieproject.m2s8kzc.mongodb.net/?retryWrites=true&w=majority&appName=movieProject",{useNewUrlParser : true})
+mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser : true})
 const db = mongoose.connection
 db.on('error',error => console.error(error))
 db.once('open',()=> console.log('Connected to Mongoose'))
 
 
-app.listen(process.env.PORT || 3000)
+app.listen(8080 || 3000)
