@@ -46,7 +46,7 @@ app.use('/user',userPostRouter)
 
 const mongoose  = require('mongoose')
 
-mongoose.connect(process.env.DATABASE_URL,{useNewUrlParser : true})
+mongoose.connect("mongodb+srv://test:test123@movieproject.m2s8kzc.mongodb.net/?retryWrites=true&w=majority&appName=movieProject",{useNewUrlParser : true})
 const db = mongoose.connection
 db.on('error',error => console.error(error))
 db.once('open',()=> console.log('Connected to Mongoose'))
